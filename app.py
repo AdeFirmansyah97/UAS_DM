@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from pandas_profiling import ProfileReport
+from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 import seaborn as sns 
 import pickle 
@@ -75,33 +75,30 @@ if st.checkbox('Train-Test Dataset'):
 def user_report():
 
     age = st.sidebar.number_input('Enter your age: ')
-    sex  = st.sidebar.selectbox('Sex',(0,1))
-    cp = st.sidebar.selectbox('Chest pain type',(0,1,2,3))
-    trtbps = st.sidebar.number_input('Resting blood pressure: ')
-    chol = st.sidebar.number_input('Serum cholestoral in mg/dl: ')
-    fbs = st.sidebar.selectbox('Fasting blood sugar',(0,1))
-    restecg = st.sidebar.number_input('Resting electrocardiographic results: ')
-    thalachh = st.sidebar.number_input('Maximum heart rate achieved: ')
-    exng = st.sidebar.selectbox('Exercise induced angina: ',(0,1))
-    oldpeak = st.sidebar.number_input('oldpeak ')
-    slp = st.sidebar.number_input('he slope of the peak exercise ST segmen: ')
-    caa = st.sidebar.selectbox('number of major vessels',(0,1,2,3))
-    thall = st.sidebar.selectbox('thal',(0,1,2))
+    tenure = st.sidebar.slider('Tenure : ', 1, 10, 20)
+    balance = st.sidebar.slider('Balance', 0, 1000, 1000000)
+    products_number = st.sidebar.slider('Products Number', 0, 1000, 1000000)
+    credit_card = st.sidebar.slider('Credit Card', 0, 1000, 1000000)
+    active_member = st.sidebar.slider('Active Member', 0, 1000, 10000)
+    estimated_salary = st.sidebar.slider('Estimated Salary', 0, 10000, 100000)
+    country_germany = st.sidebar.slider('Country Germany', 0, 1000, 1000)
+    country_spain = st.sidebar.slider('Country Spain', 0, 1000, 100000)
+    gender_male = st.sidebar.slider('gender', 0, 10, 100000)
+    credit_score = st.sidebar.slider("Credit SCore", 0, 10, 100000)
+
     
     user_report_data = {
-        'Umur':age,
-        'sex':sex,
-        'Chest Pain Type':cp,
-        'Resting Blood Pressure':trtbps,
-        'Serum Cholestrol':chol,
-        'Fasting Blood Sugar':fbs,
-        'resting electrocardiographic':restecg,
-        'maximum heart rate achieved':thalachh,
-        'exercise induced angina':exng,
-        'Previous Peak':oldpeak,
-        'Slope':slp,
-        'number of major vessels':caa,
-        'Thal Rate':thall,
+        "credit_score": credit_score,
+        "age" : age,
+        "tenure" : tenure,
+        "balance" : balance,
+        "products_number" : products_number,
+        "credit_card" : credit_card,
+        "active_member" : active_member,
+        "estimated_salary" : estimated_salary,
+        "country_Germany" : country_germany,
+        "country_Spain" : country_spain,
+        "gender_Male" : gender_male,
     }
     report_data = pd.DataFrame(user_report_data,index=[0])
     return report_data
@@ -111,13 +108,13 @@ user_data = user_report()
 st.subheader('Data Pasien')
 st.write(user_data)
 
-user_result = naive_bayes()
-naive_bayes_accuracy = accuracy_score(y_test, y_pred)
+user_result = svm.predict(user_data)
+naive_bayes_accuracy = accuracy_score(y_test, svm.predict(X_test))
 
 #output
 st.subheader('Hasilnya adalah : ')
 output=''
-if y_pred[0]==0:
+if user_result[0]==0:
     output='Kamu Aman'
 else:
     output ='Kamu terkena heart'
